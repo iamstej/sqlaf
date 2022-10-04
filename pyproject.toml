@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "sqlalchemy-filters"
+version = "0.1.0"
+description = "Library for performing structured filtering on SQLAlchemy queries using query parameter data."
+authors = ["stej <stejefferson@live.co.uk>"]
+
+[tool.poetry.dependencies]
+python = ">=3.7.0,<3.11"
+SQLAlchemy = "^1.4.24"
+
+[tool.poetry.dev-dependencies]
+alembic = "1.7.4"
+factory-boy = "^3.2.0"
+flake8 = "^4.0.1"
+isort = "^5.10.1"
+bandit = "^1.7.1"
+psycopg2-binary = "^2.9.3"
+coverage = "^6.2"
+tox = "^3.24.5"
+black = "^22.6.0"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sqlaf"
+version = "0.0.4"
+authors = [
+  { name="iamstej", email="" },
+]
+description = "Library for transforming query parameters into SQLAlchemy filters in a structured and organised manner."
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/iamstej/sqlaf"
+"Bug Tracker" = "https://github.com/iamstej/sqlaf/issues"

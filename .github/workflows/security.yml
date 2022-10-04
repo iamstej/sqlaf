@@ -1,0 +1,17 @@
+name: Security
+on: [push]
+
+jobs:
+  bandit:
+    runs-on: ubuntu-latest
+    container: python:3.9
+
+    steps:
+      - uses: actions/checkout@master
+      
+      - name: Install bandit
+        run: |
+            pip install bandit
+
+      - name: Run bandit
+        run: bandit -r . -lll

@@ -1,0 +1,16 @@
+name: Linting
+on: [push]
+
+jobs:
+  black:
+    runs-on: ubuntu-latest
+    container: python:3.9
+
+    steps:
+      - uses: actions/checkout@master
+      
+      - name: Install black
+        run: pip install black==22.6.0
+
+      - name: Run black
+        run: black --line-length 120 .

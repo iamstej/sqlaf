@@ -1,0 +1,3 @@
+PYTHONPATH=".:${PYTHONPATH}"
+export PYTHONPATH
+alembic -n $1 revision --autogenerate -m $0
