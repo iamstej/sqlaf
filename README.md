@@ -129,9 +129,7 @@ class TeamFilter(filters.Filter):
 ## Todo
 
 - [ ] Prepare roadmap.
-- [ ] Prepare v1.0 for release.
 - [ ] Write better documentation.
-- [ ] Improve CI/CD pipelines.
 - [ ] Establish contribution and release processes.
 
 ## Contributing
