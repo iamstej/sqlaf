@@ -2,6 +2,7 @@
 
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/sqlaf.svg)](https://pypi.python.org/pypi/sqlaf/)
 [![pypi](https://img.shields.io/pypi/v/sqlaf)](https://pypi.org/project/sqlaf/)
+[![codecov](https://codecov.io/gh/iamstej/sqlaf/branch/main/graph/badge.svg?token=D1L129C3NF)](https://codecov.io/gh/iamstej/sqlaf)
 
 sqlaf is a library for transforming query parameters into SQLAlchemy filters in a structured and organised manner
 
@@ -99,7 +100,7 @@ from sqlaf import filters, fields
 
 
 def custom_operator(source, value):
-    return column == value
+    return source == value
 
 
 class TeamFilter(filters.Filter):
