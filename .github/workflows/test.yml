@@ -5,7 +5,7 @@ env:
 jobs:
   tests:
     name: Testing Python ${{ matrix.python_version }} - Postgres ${{ matrix.postgres_version }}
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       max-parallel: 5
       fail-fast: false

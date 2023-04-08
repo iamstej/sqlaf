@@ -1,6 +1,8 @@
+from typing import Callable, Dict
+
 from sqlaf import operators
 
-FILTER_OPERATORS = {
+FILTER_OPERATORS: Dict[str, Callable] = {
     "eq": operators.eq,
     "ieq": operators.ieq,
     "~eq": operators.xeq,

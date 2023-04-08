@@ -22,6 +22,16 @@ class CharFieldTestCase(FilterTestCase):
         self.assertEqual(len(filtered_query), 1)
         self.assertEqual(filtered_query[0].name, "Jim Halpert")
 
+    def test_eq_filter_null_value(self):
+        class BookingFilter(filters.Filter):
+            name = fields.CharField(Booking.name, operator="eq", null_values=["null"])
+
+        BookingFactory(name=None)
+        query = self.session.query(Booking)
+        filtered_query = BookingFilter(query).filter({"name": "null"}).all()
+        self.assertEqual(len(filtered_query), 1)
+        self.assertEqual(filtered_query[0].name, None)
+
     # ieq operator
 
     def test_ieq_filter(self):
@@ -44,6 +54,15 @@ class CharFieldTestCase(FilterTestCase):
         self.assertEqual(len(filtered_query), 2)
         self.assertEqual(filtered_query[0].name, "100% Michael Scott")
         self.assertEqual(filtered_query[1].name, "Pam Halpert\Beesly")  # NOQA
+
+    def test_not_eq_filter_null_value(self):
+        class BookingFilter(filters.Filter):
+            name = fields.CharField(Booking.name, operator="~eq", null_values=["null"])
+
+        BookingFactory(name=None)
+        query = self.session.query(Booking)
+        filtered_query = BookingFilter(query).filter({"name": "null"}).all()
+        self.assertEqual(len(filtered_query), 3)
 
     # ~ieq operator
 

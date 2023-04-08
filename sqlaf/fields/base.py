@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Callable, List, Union
 
 from sqlalchemy.sql.elements import BinaryExpression
 
@@ -9,15 +9,33 @@ from sqlaf.exceptions import FieldInstantiationException, FieldValidationExcepti
 
 class Field(IField):
 
-    allowed_operators = []
+    allowed_operators: List[Union[str, Callable]] = []
+    null_values: List[str] = []
 
-    def __init__(self, source, operator: str = "eq", default: Any = None):
-        if self.allowed_operators and operator not in self.allowed_operators:
+    def __init__(
+        self,
+        source,
+        operator: Union[str, Callable] = "eq",
+        default: Any = None,
+        null_values: List[Any] = [],
+        *args,
+        **kwargs,
+    ):
+        """Base class for all fields.
+
+        Args:
+            source (str): The source field.
+            operator (str, optional): The operator to use for filtering. Defaults to "eq".
+            default (Any, optional): The default value to use if the value is None. Defaults to None.
+            null_values (List[Any], optional): The values to treat as null e.g. "null". Defaults to [].
+        """
+        if self.allowed_operators and operator not in self.allowed_operators and not isinstance(operator, Callable):
             raise FieldInstantiationException(f"{operator} not supported for {self.__class__}")
 
         self.default = default
         self.source = source
         self.operator = operator
+        self.null_values = null_values
 
     def transform(self, value: Any) -> Any:
         """Function which allows for manipulation of the value being passed in i.e. if the data needs to be in a
@@ -41,7 +59,12 @@ class Field(IField):
         Returns:
             BinaryExpression: An SQLAlchemy BinaryExpression filter.
         """
-        operator_func = config.FILTER_OPERATORS.get(self.operator.lower())
+        operator_func = None
+
+        if isinstance(self.operator, Callable):
+            operator_func = self.operator
+        elif isinstance(self.operator, str):
+            operator_func = config.FILTER_OPERATORS.get(self.operator.lower())
 
         if not operator_func:
             raise NotImplementedError(f"{self.operator} is not a supported operator.")
@@ -61,7 +84,7 @@ class Field(IField):
             BinaryExpression: An SQLAlchemy BinaryExpression filter.
         """
         try:
-            value = self.transform(value)
+            value = None if value in self.null_values else self.transform(value)
         except FieldValidationException as e:
             raise e
 

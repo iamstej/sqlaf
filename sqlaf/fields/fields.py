@@ -1,11 +1,8 @@
-from abc import ABC
 from datetime import date, datetime
 from enum import Enum, IntEnum
-from typing import Any, List
+from typing import Any, Callable, List, Union
 
-from sqlalchemy.sql.elements import BinaryExpression
 
-from sqlaf import config
 from sqlaf.exceptions import FieldInstantiationException, FieldValidationException
 from sqlaf.fields import Field
 
@@ -43,8 +40,15 @@ class EnumField(Field):
 
     allowed_operators = ["eq", "~eq"]
 
-    def __init__(self, source, enum_class: Enum, operator: str = "eq", default: Any = None):
-        super().__init__(source, operator=operator, default=default)
+    def __init__(
+        self,
+        source,
+        enum_class: Enum,
+        operator: Union[str, Callable] = "eq",
+        default: Any = None,
+        null_values: List[Any] = [],
+    ):
+        super().__init__(source, operator=operator, default=default, null_values=null_values)
 
         if not enum_class:
             raise FieldInstantiationException("`enum_class` cannot be None.")
@@ -69,8 +73,16 @@ class BooleanField(Field):
     truthy = [True, 1]
     falsy = [False, 0]
 
-    def __init__(self, source, operator: str = "eq", truthy: List = [], falsy: List = [], default: Any = None):
-        super().__init__(source, operator=operator, default=default)
+    def __init__(
+        self,
+        source,
+        operator: Union[str, Callable] = "eq",
+        truthy: List = [],
+        falsy: List = [],
+        default: Any = None,
+        null_values: List[Any] = [],
+    ):
+        super().__init__(source, operator=operator, default=default, null_values=null_values)
 
         if truthy and isinstance(truthy, list):
             self.truthy = truthy
@@ -94,8 +106,14 @@ class ArrayField(Field):
 
     allowed_operators = ["contains", "~contains"]
 
-    def __init__(self, source, operator: str = "contains", default: Any = None):
-        super().__init__(source, operator=operator, default=default)
+    def __init__(
+        self,
+        source,
+        operator: Union[str, Callable] = "contains",
+        default: Any = None,
+        null_values: List[Any] = [],
+    ):
+        super().__init__(source, operator=operator, default=default, null_values=null_values)
 
     def transform(self, value: Any):
         value = super().transform(value)
@@ -114,8 +132,15 @@ class DateField(Field):
     allowed_operators = ["eq", "~eq", "gt", "gte", "lt", "lte"]
     format = "%Y-%m-%d"
 
-    def __init__(self, source, operator: str = "eq", format: str = None, default: Any = None):
-        super().__init__(source, operator=operator, default=default)
+    def __init__(
+        self,
+        source,
+        operator: Union[str, Callable] = "eq",
+        format: str = None,
+        default: Any = None,
+        null_values: List[Any] = [],
+    ):
+        super().__init__(source, operator=operator, default=default, null_values=null_values)
 
         if format:
             self.format = format
