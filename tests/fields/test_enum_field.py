@@ -67,6 +67,16 @@ class IntegerFieldTestCase(FilterTestCase):
         self.assertEqual(filtered_query[1].number_of_heads, 4)
         self.assertEqual(filtered_query[2].number_of_heads, 5)
 
+    def test_eq_filter_null_value(self):
+        class BookingFilter(filters.Filter):
+            number_of_heads = fields.EnumField(Booking.number_of_heads, NumberOfHeads, null_values=["null"])
+
+        BookingFactory(number_of_heads=None)
+        query = self.session.query(Booking)
+        filtered_query = BookingFilter(query).filter({"number_of_heads": "null"}).all()
+        self.assertEqual(len(filtered_query), 1)
+        self.assertEqual(filtered_query[0].number_of_heads, None)
+
     # ~eq operator
 
     def test_not_eq_filter_int_enum(self):
@@ -103,6 +113,20 @@ class IntegerFieldTestCase(FilterTestCase):
         self.assertEqual(len(filtered_query), 2)
         self.assertEqual(filtered_query[0].number_of_heads, 3)
         self.assertEqual(filtered_query[1].number_of_heads, 5)
+
+    def test_not_eq_filter_null_value(self):
+        class BookingFilter(filters.Filter):
+            number_of_heads = fields.EnumField(
+                Booking.number_of_heads,
+                NumberOfHeads,
+                operator="~eq",
+                null_values=["null"],
+            )
+
+        BookingFactory(number_of_heads=None)
+        query = self.session.query(Booking)
+        filtered_query = BookingFilter(query).filter({"number_of_heads": "null"}).all()
+        self.assertEqual(len(filtered_query), 3)
 
     # exceptions
 
