@@ -31,6 +31,18 @@ class TeamFilter(filters.Filter):
     size = fields.IntegerField(Team.size, operator="eq")
 ```
 
+If you want to allow a specific value passed from a query parameter to be treated as `None`, use the `null_values` param e.g.
+
+```python
+
+from sqlaf import filters, fields
+
+class TeamFilter(filters.Filter):
+
+    size = fields.IntegerField(Team.size, operator="eq", null_values=["null", "-1"])
+```
+
+
 ### Using a Filter
 
 A filter class can be used in the following ways:
