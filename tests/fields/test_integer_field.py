@@ -56,7 +56,7 @@ class IntegerFieldTestCase(FilterTestCase):
         self.assertEqual(len(filtered_query), 1)
         self.assertEqual(filtered_query[0].number_of_heads, 3)
 
-    def test_eq_filter_none_value(self):
+    def test_eq_filter_null_value(self):
         class BookingFilter(filters.Filter):
             number_of_heads = fields.IntegerField(Booking.number_of_heads, null_values=["null"])
 
